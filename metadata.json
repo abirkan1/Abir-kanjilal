@@ -1,0 +1,5 @@
+{
+  "name": "NameScore",
+  "description": "A friendly assistant that evaluates names based on numerology, phonetics, memorability, and brand fit.",
+  "requestFramePermissions": []
+}

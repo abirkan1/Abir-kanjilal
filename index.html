@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 0L61.2 23.4L85.4 29.3L70.2 48.5L73.4 72.4L50 62.5L26.6 72.4L29.8 48.5L14.6 29.3L38.8 23.4L50 0Z' fill='%235B2E9B'/></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href="https://www.namescore.com/" />
+    
+    <!-- SEO & General -->
+    <title id="meta-title">NameScore | Free Numerology Calculator & Name Meaning Analysis</title>
+    <meta id="meta-description" name="description" content="What does your name *really* mean? Get a free, instant numerology analysis with our calculator. Discover your Name Score, Life Path number, and personality insights in 30 seconds." />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.namescore.com/" />
+    <meta id="og-title" property="og:title" content="NameScore: What's Your Name's Secret Score?" />
+    <meta id="og-description" property="og:description" content="Unlock your name's hidden potential. Our free numerology calculator reveals your unique score, core numbers, and key personality traits. Get your instant analysis now!" />
+    <meta id="og-image" property="og:image" content="https://www.namescore.com/og-default.png" />
+    
+    <!-- Twitter -->
+    <meta id="twitter-card" name="twitter:card" content="summary_large_image" />
+    <meta id="twitter-title" property="twitter:title" content="NameScore: What's Your Name's Secret Score?" />
+    <meta id="twitter-description" property="twitter:description" content="Unlock your name's hidden potential. Our free numerology calculator reveals your unique score, core numbers, and key personality traits. Get your instant analysis now!" />
+    <meta id="twitter-image" property="twitter:image" content="https://www.namescore.com/og-default.png" />
+
+    <script src="https://cdn.tailwindcss.com/3.4.3"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@700;880&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/recharts/umd/Recharts.min.js"></script>
+    <style>
+      :root {
+        --color-primary: #5B2E9B;
+        --color-secondary: #F4B244;
+        --color-text: #22252A;
+        --color-bg: #fdfcff;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: 'Manrope', sans-serif;
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      main {
+        flex-grow: 1;
+      }
+      .font-serif {
+        font-family: 'Playfair Display', serif;
+      }
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .animate-fade-in {
+        animation: fade-in 0.6s ease-out forwards;
+      }
+      @keyframes fade-slide-in {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0px);
+        }
+      }
+      .animate-fade-slide-in {
+        animation: fade-slide-in 0.6s ease-out forwards;
+      }
+      /* New Hero Styles */
+      .hero-image-container {
+        position: relative;
+        color: white;
+        background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2864&auto=format&fit=crop') no-repeat center center/cover;
+      }
+      .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle, rgba(15, 12, 41, 0.6) 0%, rgba(15, 12, 41, 0.95) 100%);
+      }
+      
+      /* Shimmer effect for headline */
+      @keyframes shimmer-effect {
+        0% { background-position: -200% center; }
+        100% { background-position: 200% center; }
+      }
+      .animate-shimmer {
+        background: linear-gradient(90deg, #d8b4fe, #fde68a, #d8b4fe);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: shimmer-effect 4s linear infinite;
+      }
+
+      /* Mystical Background for Results */
+      @keyframes mystical-glow {
+        0% { background-position: 0% 50%; background-size: 200% 200%; }
+        50% { background-position: 100% 50%; background-size: 250% 250%; }
+        100% { background-position: 0% 50%; background-size: 200% 200%; }
+      }
+      .mystical-background {
+        background: radial-gradient(circle at 25% 25%, hsla(258, 50%, 96%, 0.5) 0px, transparent 40%),
+                    radial-gradient(circle at 75% 75%, hsla(280, 50%, 96%, 0.5) 0px, transparent 40%);
+        background-size: 200% 200%;
+        animation: mystical-glow 20s ease infinite;
+      }
+       /* New Score Pop Animation */
+      @keyframes score-pop-in {
+        0% { transform: scale(0.8); opacity: 0; }
+        80% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      .animate-score-pop {
+          animation: score-pop-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+          opacity: 0;
+      }
+      .testimonial-card {
+        transform: rotate(-2deg);
+        transition: transform 0.3s ease;
+      }
+      .testimonial-card:nth-child(2) {
+        transform: rotate(1deg);
+        margin-top: 1.5rem;
+      }
+      .testimonial-card:nth-child(3) {
+         transform: rotate(-1deg);
+         margin-top: 1rem;
+      }
+      .testimonial-card:hover {
+        transform: rotate(0deg) scale(1.05);
+        z-index: 10;
+      }
+      
+      /* New Hero Form Styles */
+      .hero-form-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+      .mode-selector {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .mode-selector-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        border-radius: 12px;
+        border: 2px solid transparent;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: #e9d5ff; /* purple-200 */
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        width: 90px;
+      }
+      .mode-selector-btn:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+      .mode-selector-btn[aria-selected='true'] {
+        background-color: rgba(255, 255, 255, 0.9);
+        color: var(--color-primary);
+        border-color: var(--color-primary);
+        box-shadow: 0 4px 14px 0 rgba(91, 46, 155, 0.3);
+      }
+      .mode-selector-btn span { font-weight: 600; font-size: 0.875rem; }
+
+      .form-group { margin-bottom: 16px; }
+      .form-group input, .form-group select {
+         width: 100%;
+         padding: 12px 16px;
+         border: 1px solid rgba(255, 255, 255, 0.3);
+         border-radius: 8px;
+         background-color: rgba(0,0,0,0.2);
+         color: white;
+         transition: all 0.2s;
+      }
+      .form-group input::placeholder { color: rgba(255,255,255,0.6); }
+      .form-group select { appearance: none; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; color: rgba(255,255,255,0.8); }
+      .form-group select option { color: black; }
+      .form-group input:focus, .form-group select:focus {
+         border-color: var(--color-secondary);
+         box-shadow: 0 0 0 3px rgba(244, 178, 68, 0.3);
+         outline: none;
+      }
+      .input-hint { font-size: 0.8rem; color: #e9d5ff; margin-top: 4px; }
+      .cta-group { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+      .btn-primary {
+          background-image: linear-gradient(to right, #6D28D9 0%, #A855F7 51%, #6D28D9 100%);
+          background-size: 200% auto;
+          color: white;
+          border: none;
+          padding: 16px;
+          font-size: 1.125rem;
+          font-weight: 700;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease-out;
+          box-shadow: 0 4px 15px 0 rgba(91, 46, 155, 0.4);
+      }
+      .btn-primary:hover {
+          background-position: right center;
+          transform: scale(1.03);
+      }
+      .btn-primary:disabled { background-color: #9373c4; cursor: not-allowed; transform: none; }
+      .privacy-hint { font-size: 0.75rem; text-align: center; color: #d8b4fe; margin-top: 16px; }
+
+      .how-it-works {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 24px;
+        color: #d8b4fe; /* purple-300 */
+      }
+      .how-it-works-step {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        opacity: 0.8;
+      }
+
+      .hidden { display: none !important; }
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+      
+      /* Gamification Styles */
+      .badge-wrapper { position: relative; }
+      .badge-tooltip {
+        visibility: hidden; opacity: 0; transition: opacity 0.2s, visibility 0.2s;
+        position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+        margin-bottom: 8px;
+        padding: 8px 12px;
+        background-color: #2d3748; color: white;
+        border-radius: 6px; font-size: 0.8rem;
+        width: max-content; max-width: 200px;
+        z-index: 20;
+      }
+      .badge-wrapper:hover .badge-tooltip { visibility: visible; opacity: 1; }
+
+      /* Toast Notification Styles */
+       @keyframes toast-in {
+        from { transform: translateY(100%) scale(0.9); opacity: 0; }
+        to { transform: translateY(0) scale(1); opacity: 1; }
+      }
+      @keyframes toast-out {
+        from { transform: translateY(0) scale(1); opacity: 1; }
+        to { transform: translateY(100%) scale(0.9); opacity: 0; }
+      }
+      .animate-toast-in { animation: toast-in 0.5s cubic-bezier(0.21, 1.02, 0.73, 1) forwards; }
+      .animate-toast-out { animation: toast-out 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+      
+       /* Custom Scrollbar for Modal */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f1f5f9; /* cool-gray-100 */
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #d1d5db; /* cool-gray-300 */
+        border-radius: 10px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #9ca3af; /* cool-gray-400 */
+      }
+      /* Prose styles for blog posts */
+      .prose h2 { font-family: 'Playfair Display', serif; font-size: 1.875rem; line-height: 2.25rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom-width: 1px; border-color: #e9d5ff; }
+      .prose p { margin-top: 1.5rem; margin-bottom: 1.5rem; line-height: 1.75; }
+      .prose ul, .prose ol { margin-top: 1.5rem; margin-bottom: 1.5rem; }
+      .prose li { margin-top: 0.5rem; margin-bottom: 0.5rem; line-height: 1.75; }
+      .prose ul li::marker { color: var(--color-primary); }
+      .why-us-image-container { height: 100%; min-height: 400px; }
+
+      /* Results Page Styles */
+      .score-card {
+        background: linear-gradient(135deg, #6B21A8 0%, #A855F7 100%);
+      }
+      @keyframes progress-ring-anim {
+        from { stroke-dashoffset: 314; }
+        to { /* set in style attr */ }
+      }
+      .score-circle-progress {
+        animation: progress-ring-anim 1.5s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
+      .core-number-card .progress-bar-bg {
+        background-color: #e9d5ff;
+        border-radius: 9999px;
+        height: 8px;
+        overflow: hidden;
+      }
+      .core-number-card .progress-bar-fill {
+        background-color: #a855f7;
+        height: 100%;
+        transition: width 1s ease-out;
+      }
+      .suggestion-card {
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        transition: all 0.2s ease-in-out;
+      }
+      .suggestion-card:hover {
+        border-color: var(--color-primary);
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/generative-ai",
+    "firebase/app": "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js",
+    "firebase/auth": "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js",
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js",
+    "firebase/functions": "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js",
+    "firebase/": "https://aistudiocdn.com/firebase@^12.4.0/",
+    "firebase-functions/": "https://aistudiocdn.com/firebase-functions@^6.6.0/"
+  }
+}
+</script>
+<script>
+  // Declare jsPDF and html2canvas on the window object for global access
+  window.jspdf = window.jspdf;
+  window.html2canvas = window.html2canvas;
+  window.Recharts = window.Recharts;
+</script>
+<!-- SEO: JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "NameScore",
+  "url": "https://www.namescore.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://www.namescore.com/#analysis-section",
+    "query-input": "required name=search_term_string"
+  },
+  "description": "Get an instant, free numerology score for any name. Discover the hidden meaning and vibrational energy of your name with our comprehensive analysis."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [{
+    "@type": "Question",
+    "name": "Is this real numerology?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes! We use the ancient Pythagorean system to calculate your core numbers. It’s centuries-old wisdom, made simple and instant for you."
+    }
+  },{
+    "@type": "Question",
+    "name": "Will I have to legally change my name?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Not at all! Many people use a 'social' name for professional profiles or introductions. The universe responds to the vibration you use most often."
+    }
+  },{
+    "@type": "Question",
+    "name": "How do the 'name fixes' work?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Our engine analyzes your core numbers and suggests small, powerful letter changes (like adding an 'a' or doubling a consonant) to improve your name’s numerological harmony."
+    }
+  },{
+    "@type": "Question",
+    "name": "Is my data safe?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Absolutely. Your birthdate is used only for the calculation and is never stored on our servers. We value your privacy."
+    }
+  },{
+    "@type": "Question",
+    "name": "What if I don't like my report?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "We're confident you'll find it insightful. We offer a 7-day, no-questions-asked refund on all paid reports."
+    }
+  },{
+    "@type": "Question",
+    "name": "Can I use this for my baby or brand?",
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes! A balanced name can give a new venture or a new life a wonderful start. Just select 'Baby' or 'Brand' mode for a tailored analysis."
+    }
+  }]
+}
+</script>
+</head>
+  <body>
+    <div id="root" class="flex flex-col min-h-screen">
+        <!-- Main content area will be injected here by JS -->
+    </div>
+
+    <!-- Hidden containers for modals and other elements -->
+    <div id="pdf-render-container" class="absolute left-[-9999px] top-0 opacity-0 pointer-events-none"></div>
+
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
